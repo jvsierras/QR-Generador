@@ -1,85 +1,72 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Recuadros</title>
+    <title>Generador de Códigos QR</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            text-align: center;
             margin: 20px;
         }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .box {
+        textarea {
+            width: 80%;
+            height: 150px;
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 16px;
             border: 2px solid #ccc;
             border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-            min-height: 100px;
-            resize: vertical; /* Permite al usuario ajustar manualmente el tamaño */
-            overflow: auto; /* Asegura que el contenido no se desborde */
+            resize: none; /* Evita que el usuario cambie manualmente el tamaño */
         }
-
-        textarea {
-            width: 100%;
-            min-height: 80px;
-            resize: none; /* Desactiva el redimensionamiento manual del textarea */
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 10px;
-            font-size: 14px;
-        }
-
         button {
-            background-color: #007bff;
+            background-color: #4CAF50;
             color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
-            cursor: pointer;
+            padding: 10px 20px;
             font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
         }
-
         button:hover {
-            background-color: #0056b3;
+            background-color: #45a049;
+        }
+        img {
+            margin-top: 20px;
+            max-width: 300px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Generador de Recuadros</h1>
-        <button id="newBoxButton">Generar Nuevo Recuadro</button>
-        <div id="boxesContainer"></div>
+    <h1>Generador de Códigos QR</h1>
+    <textarea id="qrData" placeholder="Escribe aquí el texto o URL para generar el código QR..."></textarea>
+    <br>
+    <button onclick="generateQR()">Generar Código QR</button>
+    <div id="qrCodeContainer">
+        <!-- Aquí se mostrará el código QR generado -->
     </div>
 
     <script>
-        // Función para crear un nuevo recuadro
-        function createNewBox() {
-            // Crear el contenedor del recuadro
-            const box = document.createElement('div');
-            box.className = 'box';
+        function generateQR() {
+            // Obtener el texto del textarea
+            const data = document.getElementById('qrData').value;
 
-            // Crear el textarea dentro del recuadro
-            const textarea = document.createElement('textarea');
-            textarea.placeholder = 'Escribe aquí...';
+            // Validar que haya datos ingresados
+            if (!data.trim()) {
+                alert("Por favor, ingresa texto o una URL para generar el código QR.");
+                return;
+            }
 
-            // Agregar el textarea al recuadro
-            box.appendChild(textarea);
+            // Crear la URL del API de GoQR.me
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(data)}`;
 
-            // Agregar el recuadro al contenedor principal
-            document.getElementById('boxesContainer').appendChild(box);
+            // Mostrar el código QR en el contenedor
+            const qrCodeContainer = document.getElementById('qrCodeContainer');
+            qrCodeContainer.innerHTML = `<img src="${qrUrl}" alt="Código QR">`;
         }
-
-        // Evento para el botón "Generar Nuevo Recuadro"
-        document.getElementById('newBoxButton').addEventListener('click', createNewBox);
-
-        // Generar un recuadro inicial al cargar la página
-        window.onload = createNewBox;
     </script>
 </body>
 </html>
